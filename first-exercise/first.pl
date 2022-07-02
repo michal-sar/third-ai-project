@@ -3,17 +3,6 @@
 % literals!
 % conditions!
 
-% adjacent([X/Y], [S_X/S_Y]) :-
-%   (
-%   X == S_X + 1, Y == S_Y
-%   ;
-%   X == S_X - 1, Y == S_Y
-%   ;
-%   X == S_X, Y == S_Y + 1
-%   ;
-%   X == S_X, Y == S_Y - 1
-%   ).
-
 % wall([0/0]), wall([1/0]), wall([2/0]), wall([3/0]),
 % wall([4/0]), wall([4/1]), wall([4/2]), wall([4/3]),
 % wall([4/4]), wall([3/4]), wall([2/4]), wall([1/4]),
@@ -45,11 +34,22 @@ checkResultant([X/Y], [NX/NY], [RX/RY]) :-
   [NX/NY] == [X/(Y - 1)], RX is X, RY is Y - 2
   ).
 
+% adjacent([X/Y], [NX/NY]) :-
+%   [X/Y] == [(NX + 1)/NY]);
+%   [X/Y] == [(NX - 1)/NY]);
+%   [X/Y] == [NX/(NY + 1)]);
+%   [X/Y] == [NX/(NY - 1)]).
+
 adjacent([X/Y], [NX/NY]) :-
-  [X/Y] == [(NX + 1)/NY]);
-  [X/Y] == [(NX - 1)/NY]);
-  [X/Y] == [NX/(NY + 1)]);
-  [X/Y] == [NX/(NY - 1)]).
+  (
+  X == NX + 1, Y == NY
+  ;
+  X == NX - 1, Y == NY
+  ;
+  X == NX, Y == NY + 1
+  ;
+  X == NX, Y == NY - 1
+  ).
 
 can(move_sokoban(Sokoban, Position, NewPosition), [sokoban(Sokoban, Position), empty(NewPosition)]) :-
   sokoban(Sokoban),
