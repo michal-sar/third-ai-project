@@ -89,7 +89,7 @@ n = neuralNetwork(input_nodes,hidden_nodes,output_nodes, learning_rate)
 print ("neuralNetwork instantiated... ")
 
 # load the mnist training data CSV file into a list
-training_data_file = open("mnist_test.csv", 'r')
+training_data_file = open("mnist_train.csv", 'r')
 training_data_list = training_data_file.readlines()
 training_data_file.close()
 
