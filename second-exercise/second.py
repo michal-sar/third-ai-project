@@ -2,6 +2,9 @@ import numpy
 import scipy.special
 import matplotlib.pyplot
 
+import sys
+import os
+
 class neuralNetwork:
     
     # initialise the neural network
@@ -86,7 +89,7 @@ n = neuralNetwork(input_nodes,hidden_nodes,output_nodes, learning_rate)
 print ("neuralNetwork instantiated... ")
 
 # load the mnist training data CSV file into a list
-training_data_file = open("mnist_train.csv", 'r')
+training_data_file = open("mnist_test.csv", 'r')
 training_data_list = training_data_file.readlines()
 training_data_file.close()
 
@@ -117,43 +120,79 @@ for e in range(epochs):
 
 print ("neuralNetwork trained... ")
 
-# load the mnist test data CSV file into a list
-test_data_file = open("mnist_test.csv", 'r')
-test_data_list = test_data_file.readlines()
-test_data_file.close()
+# # load the mnist test data CSV file into a list
+# test_data_file = open("mnist_test.csv", 'r')
+# test_data_list = test_data_file.readlines()
+# test_data_file.close()
 
-print ("mnist_test.csv loaded... ")
+# print ("mnist_test.csv loaded... ")
 
-# test the neural network
+# # test the neural network
 
-# scorecard for how well the network performs, initially empty
-scorecard = []
+# # scorecard for how well the network performs, initially empty
+# scorecard = []
 
-# go through all the records in the test data set
-for record in test_data_list:
-    # split the record by the ',' commas
-    all_values = record.split(',')
-    # correct answer is first value
-    correct_label = int(all_values[0])
-    # scale and shift the inputs
-    inputs = (numpy.asfarray(all_values[1:]) / 255.0 * 0.99) + 0.01
-    # query the network
-    outputs = n.query(inputs)
-    # the index of the highest value corresponds to the label
-    label = numpy.argmax(outputs)
-    # append correct or incorrect to list
-    if (label == correct_label):
-        # network's answer matches correct answer, add 1 to scorecard
-        scorecard.append(1)
-    else:
-        # network's answer doesn't match correct answer, add 0 to scorecard
-        scorecard.append(0)
-        pass
+# # go through all the records in the test data set
+# for record in test_data_list:
+#     # split the record by the ',' commas
+#     all_values = record.split(',')
+#     # correct answer is first value
+#     correct_label = int(all_values[0])
+#     # scale and shift the inputs
+#     inputs = (numpy.asfarray(all_values[1:]) / 255.0 * 0.99) + 0.01
+#     # query the network
+#     outputs = n.query(inputs)
+#     # the index of the highest value corresponds to the label
+#     label = numpy.argmax(outputs)
+#     # append correct or incorrect to list
+#     if (label == correct_label):
+#         # network's answer matches correct answer, add 1 to scorecard
+#         scorecard.append(1)
+#     else:
+#         # network's answer doesn't match correct answer, add 0 to scorecard
+#         scorecard.append(0)
+#         pass
     
-    pass
+#     pass
 
-print ("neuralNetwork tested... ")
+# print ("neuralNetwork tested... ")
 
-# calculate the performance score, the fraction of correct answers
-scorecard_array = numpy.asarray(scorecard)
-print ("performance = ", scorecard_array.sum() / scorecard_array.size)
+# # calculate the performance score, the fraction of correct answers
+# scorecard_array = numpy.asarray(scorecard)
+# print ("performance = ", scorecard_array.sum() / scorecard_array.size)
+
+user_input = input ("Enter the path of a \'handwritten\' digit you\'d like the neural network to classify: ")
+assert os.path.exists(user_input), "No file was found at \'"+str(user_input)+"\'..."
+
+# evaluate
+# load the digit CSV file into a list
+digit_file = open(user_input, 'r')
+digit_list = digit_file.readline()
+digit_file.close()
+all_values = digit_list.split(',')
+inputs = (numpy.asfarray(all_values[0:]) / 255.0 * 0.99) + 0.01
+outputs = n.query(inputs)
+label = numpy.argmax(outputs)
+print ("The neural network classified the digit as a \'"+str(label)+"\'")
+# evaluate
+
+user_input = input ("Would you like to try another digit? y/n: ")
+
+while user_input == "y":
+    
+    user_input = input ("Enter the path of a \'handwritten\' digit you\'d like the neural network to classify: ")
+    assert os.path.exists(user_input), "No file was found at \'"+str(user_input)+"\'..."
+
+    # evaluate
+    # load the digit CSV file into a list
+    digit_file = open(user_input, 'r')
+    digit_list = digit_file.readline()
+    digit_file.close()
+    all_values = digit_list.split(',')
+    inputs = (numpy.asfarray(all_values[0:]) / 255.0 * 0.99) + 0.01
+    outputs = n.query(inputs)
+    label = numpy.argmax(outputs)
+    print ("The neural network classified the digit as a \'"+str(label)+"\'")
+    # evaluate
+
+    user_input = input ("Would you like to try another digit? y/n: ")
